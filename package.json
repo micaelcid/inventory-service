@@ -1,0 +1,25 @@
+{
+  "name": "js-caelum",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon app.js",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://micaelcid@bitbucket.org/micaelcid/node-js-caelum.git"
+  },
+  "author": "Micael Cid",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/micaelcid/node-js-caelum#readme"
+}
