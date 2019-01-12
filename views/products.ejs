@@ -10,10 +10,10 @@
 <body>
     <%- include("templates/header") %>
     <div class="container-fluid">
-        <h3 class="float-left">
+        <h3 class="float-left" style="margin-bottom: 20px;">
             Lista de produtos
         </h3>
-        <div class="btn btn-primary float-right" data-toggle="modal" data-target="#addModal">
+        <div class="btn btn-primary float-right" style="margin-top: -4px;" data-toggle="modal" data-target="#addModal">
             Adicionar
         </div>
         <table class="table table-striped">
@@ -23,16 +23,24 @@
                     <th>Título</th>
                     <th>Preço</th>
                     <th>Descrição</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="product-list">
                 <% if(products != undefined){ %>
-                    <% products.map((product, index) => {%>
-                        <tr>
-                            <th><%= index+1 %></th>
+                    <% products.forEach(product => {%>
+                        <tr data-id='<%= product.id %>'>
+                            <th><%= product.id %></th>
                             <td><%= product.titulo %></td>
                             <td><%= product.descricao %></td>
                             <td><%= product.preco %></td>
+                            <td class="product-edit">
+                                <i class="far fa-edit"></i>
+                            </td>
+                            <td class="product-remove">
+                                <i class="far fa-trash-alt" aria-hidden="true"></i>
+                            </td>
                         </tr>
                     <% }) %>
                 <% } %>
@@ -51,16 +59,16 @@
                     <div class="modal-body">
                         <form>
                             <div class="form-group">
-                                <input class="form-control" type="text" id="title" placeholder="Título">
+                                <input class="form-control" type="text" id="titleAdd" placeholder="Título">
                             </div>
                             <div class="form-group">                                
-                                <input class="form-control" type="text" id="desc" placeholder="Descrição">
+                                <input class="form-control" type="text" id="descAdd" placeholder="Descrição">
                             </div>
                             <div class="form-group">
-                                <input class="form-control" type="number" id="price" placeholder="Preço">
+                                <input class="form-control" type="number" id="priceAdd" placeholder="Preço">
                             </div>
                         </form>
-                        <p class="alert alert-danger" id="modal-error" style="display:none">
+                        <p class="alert alert-danger" id="modal-add-error" style="display:none">
                             Por favor, preencha todos os campos.
                         </p>
                     </div>
@@ -71,35 +79,156 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="editModal" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Editar produto</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <input class="form-control" type="text" id="titleEdit" placeholder="Título">
+                                </div>
+                                <div class="form-group">                                
+                                    <input class="form-control" type="text" id="descEdit" placeholder="Descrição">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="number" id="priceEdit" placeholder="Preço">
+                                </div>
+                            </form>
+                            <p class="alert alert-danger" id="modal-edit-error" style="display:none">
+                                Por favor, preencha todos os campos.
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" id="saveEditProduct">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
     </div>
     <%- include("templates/scripts") %>
     <script>
         $(function(){
             $('#saveNewProduct').click(function(){
-                $("#modal-error").hide()
-                const title = $("#title").val().trim()
-                const desc = $("#desc").val().trim()
-                const price = $("#price").val().trim()
-                const data = {
+                $("#modal-add-error").hide()
+                const title = $("#titleAdd").val().trim()
+                const desc = $("#descAdd").val().trim()
+                const price = $("#priceAdd").val().trim()
+                const data = JSON.stringify({
                     titulo: title,
                     descricao: desc,
                     preco:price
-                }
+                })
                 const valid = title != "" && desc != "" && price != ""
-                console.log(data)
                 if(valid){
                     fetch("/product", {
-                        method:"post",
-                        data:data
+                        method:"POST",
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body:data
                     }).then(response => response.json())
                     .then((response) => {
-                        console.log(response)
+                        let html = `
+                            <tr data-id='${response.id}'>
+                                <th>${response.id}</th>
+                                <td>${response.titulo}</td>
+                                <td>${response.descricao}</td>
+                                <td>${response.preco}</td>
+                                <td class="product-edit">
+                                    <i class="far fa-edit"></i>
+                                </td>
+                                <td class="product-remove">
+                                    <i class="far fa-trash-alt" aria-hidden="true"></i>
+                                </td>
+                            </tr> 
+                        `
+                        $("#product-list").append(html)
+                        $('#addModal').modal('toggle');
+                        $("#titleAdd").val("")
+                        $("#descAdd").val("")
+                        $("#priceAdd").val("")
                     })
+
                 }
                 else{
-                    $("#modal-error").show()
+                    $("#modal-add-error").show()
                 }
 
+            })
+            $("body").on("click", ".product-remove", function(){
+               const element = $(this).parent()
+               const id = element.data('id')
+               fetch("/product/"+id, {
+                    method:"DELETE",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                }).then(response => response.json())
+                .then((response) => {
+                    element.remove()
+                })
+            })
+            $("body").on("click", ".product-edit", function(){
+                var id = $(this).parent().data('id')
+                var title = $(this).prev().prev().prev().html()
+                var desc =  $(this).prev().prev().html()
+                var price = $(this).prev().html()
+                $("#titleEdit").val(title)
+                $("#descEdit").val(desc)
+                $("#priceEdit").val(price)
+                $("#editModal").modal('toggle')
+                $("body").on("click", "#saveEditProduct", function(){
+                    $("#modal-edit-error").hide()
+                    title = $("#titleEdit").val().trim()
+                    desc = $("#descEdit").val().trim()
+                    price = $("#priceEdit").val().trim()
+                    const data = JSON.stringify({
+                        id:id,
+                        titulo: title,
+                        descricao: desc,
+                        preco:price
+                    })
+                    const valid = title != "" && desc != "" && price != ""
+                    if(valid){
+                        fetch("/product", {
+                            method:"PUT",
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body:data
+                        })
+                        .then((response) => {
+                            let html = `
+                                    <th>${id}</th>
+                                    <td>${title}</td>
+                                    <td>${desc}</td>
+                                    <td>${price}</td>
+                                    <td class="product-edit">
+                                        <i class="far fa-edit"></i>
+                                    </td>
+                                    <td class="product-remove">
+                                        <i class="far fa-trash-alt" aria-hidden="true"></i>
+                                    </td>
+                            `
+                            //$("#product-list").append(html)
+                            $('#editModal').modal('toggle');
+                        })
+
+                    }
+                    else{
+                        $("#modal-edit-error").show()
+                    }
+                })
             })
         })
     </script>

@@ -9,3 +9,6 @@
     color:white !important;
     border-color:white !important;
 }
+i {
+    cursor: pointer;
+}
