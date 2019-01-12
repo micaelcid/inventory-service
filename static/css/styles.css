@@ -1,10 +1,11 @@
-body{
-
-}
-nav{
-    background-color:#2b2b2b !important;
+.navbar{
+    background-color:#007bff !important;
     margin-bottom:20px;
 }
-.form-control{
-    margin-bottom:10px;
+.navbar a{
+    color:white !important;
+}
+.navbar button{
+    color:white !important;
+    border-color:white !important;
 }

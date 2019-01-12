@@ -5,6 +5,7 @@
   "main": "app.js",
   "dependencies": {
     "bootstrap": "^4.2.1",
+    "consign": "^0.1.6",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "mysql": "^2.16.0"

@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Início - Casa do Código</title>
+    <title>Erro - Casa do Código</title>
     <%- include("templates/styles") %>
 </head>
 <body>
     <%- include("templates/header") %>
     <div class="container-fluid">
-        Início
+        <h1>Oops... algo deu errado.</h1>
+        <p class="alert alert-danger">
+            <%= error %>
+        </p>
     </div>
     <%- include("templates/scripts") %>
 </body>

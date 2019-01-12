@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Products</title>
+    <title>Produtos - Casa do Código</title>
     <%- include("templates/styles") %>
 </head>
 <body>
     <%- include("templates/header") %>
     <div class="container-fluid">
         <h3 class="float-left">
-            Product list
+            Lista de produtos
         </h3>
         <div class="btn btn-primary float-right" data-toggle="modal" data-target="#addModal">
             Adicionar
@@ -26,14 +26,16 @@
                 </tr>
             </thead>
             <tbody>
-                <% products.map((product, index) => {%>
-                    <tr>
-                        <th><%= index+1 %></th>
-                        <td><%= product.titulo %></td>
-                        <td><%= product.descricao %></td>
-                        <td><%= product.preco %></td>
-                    </tr>
-                <% }) %>
+                <% if(products != undefined){ %>
+                    <% products.map((product, index) => {%>
+                        <tr>
+                            <th><%= index+1 %></th>
+                            <td><%= product.titulo %></td>
+                            <td><%= product.descricao %></td>
+                            <td><%= product.preco %></td>
+                        </tr>
+                    <% }) %>
+                <% } %>
             </tbody>
         </table>
         <!-- Modal -->
@@ -50,19 +52,56 @@
                         <form>
                             <div class="form-group">
                                 <input class="form-control" type="text" id="title" placeholder="Título">
+                            </div>
+                            <div class="form-group">                                
                                 <input class="form-control" type="text" id="desc" placeholder="Descrição">
+                            </div>
+                            <div class="form-group">
                                 <input class="form-control" type="number" id="price" placeholder="Preço">
                             </div>
                         </form>
+                        <p class="alert alert-danger" id="modal-error" style="display:none">
+                            Por favor, preencha todos os campos.
+                        </p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="saveNewProduct">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="saveNewProduct">Salvar</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <%- include("templates/scripts") %>
+    <script>
+        $(function(){
+            $('#saveNewProduct').click(function(){
+                $("#modal-error").hide()
+                const title = $("#title").val().trim()
+                const desc = $("#desc").val().trim()
+                const price = $("#price").val().trim()
+                const data = {
+                    titulo: title,
+                    descricao: desc,
+                    preco:price
+                }
+                const valid = title != "" && desc != "" && price != ""
+                console.log(data)
+                if(valid){
+                    fetch("/product", {
+                        method:"post",
+                        data:data
+                    }).then(response => response.json())
+                    .then((response) => {
+                        console.log(response)
+                    })
+                }
+                else{
+                    $("#modal-error").show()
+                }
+
+            })
+        })
+    </script>
 </body>
 </html>
