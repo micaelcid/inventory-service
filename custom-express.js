@@ -22,7 +22,6 @@ app.use('/static',
 consign()
 .include('./routes')
 .then('./config')
-.then('./repositories')
 .into(app)
 
 // Throws an exception when the route is not found
