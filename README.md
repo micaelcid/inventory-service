@@ -4,7 +4,7 @@ An API for managing books built in Node + Express
 
 ## Getting started
 
-After that, Clone the repo with
+Clone the repo with
 ```git clone https://github.com/micaelcid/node-js-caelum```
 
 Install dependencies with
