@@ -15,4 +15,4 @@ Run dev mode with
 
 Now you can open the browser and navigate to `http://localhost:3000`
 
-If you would like to consume this API through a client, clone the frontend for this API: ```https://github.com/micaelcid/react-universal-app```
+If you would like to consume this API through a client, clone the frontend: ```https://github.com/micaelcid/react-universal-app```
