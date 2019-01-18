@@ -2,12 +2,12 @@
 const Product = require('../models/product')
 const Validator = require('../validators/product')
 
-exports.create = (request, response) => {
+exports.create = (request, response, next) => {
     Validator.fields(request, response)
    
     Product.create(request.body, (error, result, fields) => {
         if(error) return next(error)
-
+        
         request.body.id = result.insertId
         response
         .status(201)
@@ -25,14 +25,11 @@ exports.all = (request, response, next) => {
         // Content negotiation
         response
         .status(200)
-        .format({
-            html(){ response.render('products', { products: result })},
-            json(){response.json(result)},
-        })
+        .json(result)
     })
 }
 
-exports.update = (request, response) => {
+exports.update = (request, response, next) => {
 
     Validator.fields(request, response)
     
@@ -48,7 +45,7 @@ exports.update = (request, response) => {
 
 }
 
-exports.delete = (request, response) => {
+exports.delete = (request, response, next) => {
 
     Validator.id(request.params.id)
     

@@ -3,7 +3,7 @@
 */
 
 // Retorna o express configurado
-const app = require('./custom-express')
+const app = require('./bootstrap')
 const port = 3000
 const ip = "localhost"
 

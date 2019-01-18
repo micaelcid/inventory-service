@@ -7,6 +7,7 @@
     "body-parser": "^1.18.3",
     "bootstrap": "^4.2.1",
     "consign": "^0.1.6",
+    "cors": "^2.8.5",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "express-validator": "^5.3.1",
