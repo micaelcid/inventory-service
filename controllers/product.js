@@ -24,8 +24,20 @@ exports.all = (request, response, next) => {
 
         // Content negotiation
         response
-        .status(200)
-        .json(result)
+        .format({
+            'text/html': () => {
+                response
+                .status(200)
+                .render('products', {
+                    products: result
+                })
+            },
+            'application/json': () => {
+                response
+                .status(200)
+                .json(result)
+            },
+        })
     })
 }
 

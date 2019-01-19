@@ -5,10 +5,10 @@ class Product{
         this.db = db
     }
     async all(callback){
-        await this.db.query('select * from livros', callback)
+        //await this.db.query('select * from livros', callback)
     }
     async create(product, callback){
-        await this.db.query('insert into livros set ?', product, callback)
+        //await this.db.query('insert into livros set ?', product, callback)
     }
     async update(product, callback){
         await this.db.query(`update livros

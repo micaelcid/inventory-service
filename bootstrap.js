@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+
 const cors = require('cors')
 const consign = require('consign')
 const bodyParser = require('body-parser')
@@ -14,9 +15,6 @@ app.use(expressValidator())
 // Configuring the template engine
 app.set("view engine", "ejs")
 
-
-
-
 // Configuring static path for files
 app.use('/static', 
     express.static('./node_modules/bootstrap/dist'),
@@ -28,6 +26,18 @@ consign()
 .include('./routes')
 .then('./config')
 .into(app)
+
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+app.set('io',io);			
+server.listen(3003);
+io.on('connection', function (socket) {
+    socket.emit('news', { hello: 'world' });
+    socket.on('my other event', function (data) {
+        console.log(data);
+    });
+});
+
 
 // Throws an exception when the route is not found
 app.use((request, response, next) => {
