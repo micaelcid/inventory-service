@@ -1,11 +1,11 @@
 
 # Node + Express API
-An API for managing books built in Node + Express
+An API for managing products built in Node + Express
 
 ## Getting started
 
 Clone the repo with
-```git clone https://github.com/micaelcid/node-js-caelum```
+```git clone https://github.com/micaelcid/inventory-service```
 
 Install dependencies with
 ```npm i```
@@ -15,4 +15,4 @@ Run dev mode with
 
 Now you can open the browser and navigate to `http://localhost:3000`
 
-If you would like to consume this API through a client, clone the frontend: ```https://github.com/micaelcid/react-universal-app```
+If you would like to consume this API through a client, clone the interface: ```https://github.com/micaelcid/inventory-interface```
